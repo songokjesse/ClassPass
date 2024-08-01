@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('timetables', function (Blueprint $table) {
             $table->id();
+            $table->foreignUuid('course_id')->constrained();
+            $table->string('location_name');
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }

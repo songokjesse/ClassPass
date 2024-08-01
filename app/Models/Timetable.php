@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Timetable extends Model
 {
     use HasFactory;
+    protected $fillable = ['course_id', 'location_name', 'date', 'start_time', 'end_time'];
 }

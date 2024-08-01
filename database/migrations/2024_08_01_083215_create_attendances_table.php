@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('timetable_id');
+            $table->foreign('student_id')->references('id')->on('students');
+            $table->foreign('timetable_id')->references('id')->on('timetables');
             $table->timestamps();
         });
     }

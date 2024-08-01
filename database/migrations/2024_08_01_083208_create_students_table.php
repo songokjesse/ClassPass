@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
+            $table->string('admission_no')->unique();
+            $table->foreignUuid('course_id')->constrained();
             $table->timestamps();
         });
     }
