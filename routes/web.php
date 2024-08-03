@@ -6,15 +6,17 @@ use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get("/", function () {
-    return view("welcome");
-});
 
 Route::middleware([
     "auth:sanctum",
     config("jetstream.auth_session"),
     "verified",
 ])->group(function () {
+    Route::get("/", function () {
+        $courses = Course::where("user_id", Auth::id())->get();
+        return view("dashboard", compact("courses"));
+    });
+
     Route::get("/dashboard", function () {
         $courses = Course::where("user_id", Auth::id())->get();
         return view("dashboard", compact("courses"));
@@ -22,4 +24,6 @@ Route::middleware([
 
     Route::resource('courses', CourseController::class);
     Route::get('/courses/{courseId}/timetables', [TimetableController::class, "index"])->name("timetable.index");
+    Route::get('/courses/{courseId}/timetables/create', [TimetableController::class, "create"])->name("timetable.create");
+    Route::post('/timetables', [TimetableController::class, "store"])->name("timetable.store");
 });
