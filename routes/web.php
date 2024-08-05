@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TimetableController;
 use App\Models\Course;
@@ -27,13 +28,15 @@ Route::middleware([
     Route::get('/courses/{courseId}/timetables', [TimetableController::class, "index"])->name("timetable.index");
     Route::get('/courses/{courseId}/timetables/create', [TimetableController::class, "create"])->name("timetable.create");
     Route::post('/timetables', [TimetableController::class, "store"])->name("timetable.store");
+    Route::get('/attendance/{timetable_id}', [AttendanceController::class, "index"])->name("attendance.index");
 
     Route::get('qr-code', function () {
         $path = public_path().'/qr-code.png';
         $filename = '/qr-code.png';
         QRCode::text('QR Code Generator for Laravel!')
             ->setOutfile($path )
+            ->setSize(10)
             ->png();
-        return '<img src=' . $filename . '>';
+        return view('qr-code.index', compact('filename'));
     });
 });

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{$course->course_code}} : {{$course->course_name}} {{ __('Attendance') }}
+            {{$timetable->course->course_code}} : {{$timetable->course->course_name}} {{ __('Attendance') }}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -12,7 +12,7 @@
 
                     <div class="flex justify-between">
                         <h1 class="mt-2 text-2xl font-medium text-gray-900">
-                            Timetable
+                            Attendance List
                         </h1>
 {{--                        <a href="{{route('timetable.create', $course->id)}}"><x-button>Add Lesson</x-button></a>--}}
                     </div>
@@ -21,11 +21,9 @@
                             <thead>
                             <tr>
                                 <th class="px-6 py-3 bg-gray-50 text-left">#</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left">Date</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left">Admission Number</th>
                                 <th class="px-6 py-3 bg-gray-50 text-left">Location</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left">Start Time</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left">End Time</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left">QR Code/Attendance</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left">Time</th>
                             </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
