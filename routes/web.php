@@ -29,14 +29,6 @@ Route::middleware([
     Route::get('/courses/{courseId}/timetables/create', [TimetableController::class, "create"])->name("timetable.create");
     Route::post('/timetables', [TimetableController::class, "store"])->name("timetable.store");
     Route::get('/attendance/{timetable_id}', [AttendanceController::class, "index"])->name("attendance.index");
+    Route::get('/qr-code/{timetable_id}', [AttendanceController::class, "generateQRCode"])->name("attendance.qr-code");
 
-    Route::get('qr-code', function () {
-        $path = public_path().'/qr-code.png';
-        $filename = '/qr-code.png';
-        QRCode::text('QR Code Generator for Laravel!')
-            ->setOutfile($path )
-            ->setSize(10)
-            ->png();
-        return view('qr-code.index', compact('filename'));
-    });
 });

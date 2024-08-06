@@ -36,7 +36,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{$timetable->location_name}}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{$timetable->start_time}}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{$timetable->end_time}}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap"><a href="#"><x-button>Print QR</x-button></a><a href="{{route('attendance.index', $timetable->id)}}"><x-button>View Attendance</x-button></a></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><a href="{{route('attendance.qr-code', $timetable->id)}}"><x-button>QR Code</x-button></a><a href="{{route('attendance.index', $timetable->id)}}"><x-button>View Attendance</x-button></a></td>
                                 </tr>
                             @endforeach
                             </tbody>
