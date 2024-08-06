@@ -35,14 +35,12 @@ class AttendanceController extends Controller
             ->png();
         return view('qr-code.index', compact('qrCode', 'timetable'));
     }
-    public function generatePDF($timetable_id)
+
+    public function create($timetable_id): Application|Factory|View
     {
-        $path = public_path().'/'.$timetable_id.'.png';
-        $qrCode = '/'.$timetable_id.'.png';
-        QrCode::url(env('APP_URL').'/attendance/'.$timetable_id.'/capture')
-            ->setOutfile($path )
-            ->setSize(10)
-            ->png();
-        return view('qr-code.index', compact('qrCode'));
+        $attendance = Attendance::where('timetable_id', $timetable_id)->get();
+        $timetable= Timetable::with('course')->find($timetable_id);
+        return view('attendance.create', compact('timetable', 'attendance'));
     }
+
 }
