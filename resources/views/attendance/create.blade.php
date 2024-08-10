@@ -25,7 +25,7 @@
                         </div>
                         <div class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                             <x-button type="submit">
-                                Save
+                                Submit Attendance
                             </x-button>
                         </div>
 

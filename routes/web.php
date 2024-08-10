@@ -31,7 +31,6 @@ Route::middleware([
     Route::get('/attendance/{timetable_id}', [AttendanceController::class, "index"])->name("attendance.index");
     Route::post('/attendance/{timetable_id}', [AttendanceController::class, "store"])->name("attendance.store");
     Route::get('/qr-code/{timetable_id}', [AttendanceController::class, "generateQRCode"])->name("attendance.qr-code");
-
 //    Route::get('/attendance/{timetable_id}/capture', [AttendanceController::class, "create"])->name("attendance.create");
 
 });
