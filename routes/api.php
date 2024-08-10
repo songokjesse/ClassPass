@@ -18,9 +18,10 @@ Route::post("/login", function (Request $request) {
     ]);
 
     $user = User::where("email", $request->email)->first();
-    if (!$user || Hash::check($request->password, $user->password)) {
+
+    if (! $user || ! Hash::check($request->password, $user->password)) {
         throw ValidationException::withMessages([
-            "email" => ["The Provided Credential is Incorrect"],
+            'email' => ['The provided credentials are incorrect.'],
         ]);
     }
 
