@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +36,25 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get("/user", function (Request $request) {
         return $request->user();
     });
+});
+
+Route::post('/register', function (Request $request) {
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+        'device_name' => ['required'],
+    ]);
+
+    $user = User::create([
+        'name' => $request['name'],
+        'email' => $request['email'],
+        'password' => Hash::make($request['password']),
+    ]);
+
+    event(new Registered($user));
+
+    return response()->json([
+        'token' => $user->createToken($request->device_name)->plainTextToken,
+    ]);
 });
