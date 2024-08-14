@@ -23,20 +23,18 @@
                                 <th class="px-6 py-3 bg-gray-50 text-left">#</th>
                                 <th class="px-6 py-3 bg-gray-50 text-left">Admission Number</th>
                                 <th class="px-6 py-3 bg-gray-50 text-left">Location</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left">Time</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left">Submission Time</th>
                             </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-{{--                            @foreach($timetables as $timetable)--}}
-{{--                                <tr>--}}
-{{--                                    <td class=" sm:table-cell px-6 py-4 whitespace-nowrap">{{$loop->iteration}}</td>--}}
-{{--                                    <td class="sm:table-cell px-6 py-4 whitespace-nowrap">{{$timetable->date}}</td>--}}
-{{--                                    <td class="px-6 py-4 whitespace-nowrap">{{$timetable->location_name}}</td>--}}
-{{--                                    <td class="px-6 py-4 whitespace-nowrap">{{$timetable->start_time}}</td>--}}
-{{--                                    <td class="px-6 py-4 whitespace-nowrap">{{$timetable->end_time}}</td>--}}
-{{--                                    <td class="px-6 py-4 whitespace-nowrap"><a href="#"><x-button>Print QR</x-button></a><a href="#"><x-button>View Attendance</x-button></a></td>--}}
-{{--                                </tr>--}}
-{{--                            @endforeach--}}
+                            @foreach($attendances as $attendance)
+                                <tr>
+                                    <td class=" sm:table-cell px-6 py-4 whitespace-nowrap">{{$loop->iteration}}</td>
+                                    <td class="sm:table-cell px-6 py-4 whitespace-nowrap">{{$attendance->student->admission_no}}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{$timetable->location_name}}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{$attendance->created_at}}</td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>

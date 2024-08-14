@@ -1,6 +1,10 @@
 <?php
 
+use App\Models\Attendance;
+use App\Models\Student;
+use App\Models\Timetable;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -36,6 +40,43 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get("/user", function (Request $request) {
         return $request->user();
     });
+
+    Route::post("/attendance", function (Request $request) {
+        $request->validate([
+            "user_id" => ["required", "exists:students,user_id"],
+            'timetable_id' => ["required", "exists:timetables,id"],
+        ]);
+
+        $student = Student::where('user_id', $request['user_id'])->firstOrFail();
+        $timetable = Timetable::where('id', $request['timetable_id'])->firstOrFail();
+
+        //TODO
+        // Validate if a user submitted attendance before the class started
+        $endTime = Carbon::parse($timetable->end_time);
+        $currentTime = Carbon::now();
+
+        if ($currentTime->diffInMinutes($endTime) > 30) {
+            return response()->json([
+                'message' => 'You have already missed the attendance submission time.',
+                'success' => false,
+            ], 422);
+        }
+
+        if (Attendance::where(['timetable_id' => $request['timetable_id'],'student_id' => $student->id])->exists()) {
+            return response()->json([
+                'message' => "You have already submitted attendance for today's Lesson.",
+                'success' => false,
+            ], 422);
+        }
+        Attendance::create([
+            'student_id' => $student->id,
+            'timetable_id' => $request['timetable_id'],
+        ]);
+
+        return response()->json([
+            "message" => "You have successfully submitted attendance for today's class.",
+        ], 201);
+    });
 });
 
 Route::post('/register', function (Request $request) {
@@ -43,6 +84,7 @@ Route::post('/register', function (Request $request) {
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'password' => ['required', 'string', 'min:8', 'confirmed'],
+        'admission_number' => ['required', 'string', 'max:255'],
         'device_name' => ['required'],
     ]);
 
@@ -50,6 +92,12 @@ Route::post('/register', function (Request $request) {
         'name' => $request['name'],
         'email' => $request['email'],
         'password' => Hash::make($request['password']),
+    ]);
+
+//    Add student admission number to the student table
+    Student::create([
+        'user_id' => $user->id,
+        'admission_no' => $request['admission_number'],
     ]);
 
     event(new Registered($user));

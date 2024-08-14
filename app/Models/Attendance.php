@@ -13,9 +13,9 @@ class Attendance extends Model
 
     protected $fillable = ['student_id', 'timetable_id'];
 
-    public function students(): HasMany
+    public function student(): BelongsTo
     {
-        return $this->hasMany(Student::class);
+        return $this->belongsTo(Student::class);
     }
 
     public function timetable(): BelongsTo
