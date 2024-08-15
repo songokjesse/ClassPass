@@ -50,17 +50,33 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
         $student = Student::where('user_id', $request['user_id'])->firstOrFail();
         $timetable = Timetable::where('id', $request['timetable_id'])->firstOrFail();
 
-//        //TODO
-//        // Validate if a user submitted attendance before the class started
-//        $endTime = Carbon::parse($timetable->end_time);
-//        $currentTime = Carbon::now();
-//
-//        if ($currentTime->diffInMinutes($endTime) > 30) {
-//            return response()->json([
-//                'message' => 'You have already missed the attendance submission time.',
-//                'success' => false,
-//            ], 422);
-//        }
+
+        // Validate if a user submitted attendance before or after the class
+        $classStartTime = Carbon::parse($timetable->start_time);
+        $classEndTime = Carbon::parse($timetable->end_time);
+        $classDate = Carbon::parse($timetable->date);
+        $currentTime = Carbon::now('Africa/Nairobi'); // Replace with appropriate time zone
+
+        // Allow a 5-minute grace period after class end
+        $gracePeriod = 30;
+
+        if ($currentTime->lt($classStartTime)) {
+            return response()->json([
+                'message' => 'Attendance submission is not yet open.',
+                'success' => false,
+            ], 422);
+        } elseif ($currentTime->diffInMinutes($classEndTime) > $gracePeriod) {
+            return response()->json([
+                'message' => 'You have missed the attendance submission time.',
+                'success' => false,
+            ], 422);
+        } elseif ($currentTime->diffInDays($classDate) !== 0) {
+            return response()->json([
+                'message' => 'Attendance submission is only allowed on the class date.',
+                'success' => false,
+            ], 422);
+        }
+
 
         if (Attendance::where(['timetable_id' => $request['timetable_id'],'student_id' => $student->id])->exists()) {
             return response()->json([
