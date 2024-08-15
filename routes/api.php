@@ -66,6 +66,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
             return response()->json([
                 'message' => "You have already submitted attendance for today's Lesson.",
                 'success' => false,
+                "state" => "Redirect",
             ], 422);
         }
         Attendance::create([
