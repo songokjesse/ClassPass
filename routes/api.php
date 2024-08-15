@@ -50,17 +50,17 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
         $student = Student::where('user_id', $request['user_id'])->firstOrFail();
         $timetable = Timetable::where('id', $request['timetable_id'])->firstOrFail();
 
-        //TODO
-        // Validate if a user submitted attendance before the class started
-        $endTime = Carbon::parse($timetable->end_time);
-        $currentTime = Carbon::now();
-
-        if ($currentTime->diffInMinutes($endTime) > 30) {
-            return response()->json([
-                'message' => 'You have already missed the attendance submission time.',
-                'success' => false,
-            ], 422);
-        }
+//        //TODO
+//        // Validate if a user submitted attendance before the class started
+//        $endTime = Carbon::parse($timetable->end_time);
+//        $currentTime = Carbon::now();
+//
+//        if ($currentTime->diffInMinutes($endTime) > 30) {
+//            return response()->json([
+//                'message' => 'You have already missed the attendance submission time.',
+//                'success' => false,
+//            ], 422);
+//        }
 
         if (Attendance::where(['timetable_id' => $request['timetable_id'],'student_id' => $student->id])->exists()) {
             return response()->json([
