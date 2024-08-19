@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 Route::post("/login", function (Request $request) {
     $request->validate([
@@ -50,29 +51,34 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
         $student = Student::where('user_id', $request['user_id'])->firstOrFail();
         $timetable = Timetable::where('id', $request['timetable_id'])->firstOrFail();
 
+        $classDate = Carbon::parse($timetable->date)->timezone('Africa/Nairobi');
+        $classStartTime = Carbon::parse($classDate->format('Y-m-d') . ' ' . $timetable->start_time)->timezone('Africa/Nairobi');
+        $classEndTime = Carbon::parse($classDate->format('Y-m-d') . ' ' . $timetable->end_time)->timezone('Africa/Nairobi');
 
-        // Validate if a user submitted attendance before or after the class
-        $classStartTime = Carbon::parse($timetable->start_time);
-        $classEndTime = Carbon::parse($timetable->end_time);
-        $classDate = Carbon::parse($timetable->date);
-        $currentTime = Carbon::now('Africa/Nairobi'); // Replace with appropriate time zone
-
-        // Allow a 5-minute grace period after class end
-        $gracePeriod = 30;
-
+        $currentTime = Carbon::now('Africa/Nairobi'); // Adjust time zone if necessary
+        dump($classStartTime);
+        $gracePeriodMinutes = 30;
+        // Check if attendance submission is before class start time->tz('UTC')->tz('Africa/Nairobi')
         if ($currentTime->lt($classStartTime)) {
             return response()->json([
-                'message' => 'Attendance submission is not yet open.',
+                'message' => 'Attendance submission is not yet open for class starting at ' . $classStartTime->format('H:i'),
                 'success' => false,
             ], 422);
-        } elseif ($currentTime->diffInMinutes($classEndTime) > $gracePeriod) {
+        }
+
+        // Check if attendance submission is after class end time with grace period
+        $timeDifference = $currentTime->diffInMinutes($classEndTime);
+        if ($timeDifference > $gracePeriodMinutes) {
             return response()->json([
-                'message' => 'You have missed the attendance submission time.',
+                'message' => 'Attendance submission time has passed for class ending at ' . $classEndTime->format('H:i'),
                 'success' => false,
             ], 422);
-        } elseif ($currentTime->diffInDays($classDate) !== 0) {
+        }
+
+        // Check if attendance submission is on the correct date
+        if ($currentTime->format('Y-m-d') !== $classDate->format('Y-m-d')) {
             return response()->json([
-                'message' => 'Attendance submission is only allowed on the class date.',
+                'message' => 'Attendance submission is only allowed on the class date: ' . $classDate->format('Y-m-d'),
                 'success' => false,
             ], 422);
         }
@@ -123,3 +129,5 @@ Route::post('/register', function (Request $request) {
         'token' => $user->createToken($request->device_name)->plainTextToken,
     ]);
 });
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
