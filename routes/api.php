@@ -56,7 +56,6 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
         $classEndTime = Carbon::parse($classDate->format('Y-m-d') . ' ' . $timetable->end_time)->timezone('Africa/Nairobi');
 
         $currentTime = Carbon::now('Africa/Nairobi'); // Adjust time zone if necessary
-        dump($classStartTime);
         $gracePeriodMinutes = 30;
         // Check if attendance submission is before class start time->tz('UTC')->tz('Africa/Nairobi')
         if ($currentTime->lt($classStartTime)) {

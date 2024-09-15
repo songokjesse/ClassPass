@@ -32,7 +32,7 @@
                                     <td class=" sm:table-cell px-6 py-4 whitespace-nowrap">{{$loop->iteration}}</td>
                                     <td class="sm:table-cell px-6 py-4 whitespace-nowrap">{{$attendance->student->admission_no}}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{$timetable->location_name}}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{$attendance->created_at}}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{$attendance->created_at->timezone('Africa/Nairobi')->format('Y-m-d H:i:s')}}</td>
                                 </tr>
                             @endforeach
                             </tbody>

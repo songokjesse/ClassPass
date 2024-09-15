@@ -34,8 +34,8 @@
                                     <td class=" sm:table-cell px-6 py-4 whitespace-nowrap">{{$loop->iteration}}</td>
                                     <td class="sm:table-cell px-6 py-4 whitespace-nowrap">{{$timetable->date}}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{$timetable->location_name}}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{$timetable->start_time}}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{$timetable->end_time}}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($timetable->start_time, 'UTC')->setTimezone('Africa/Nairobi')->format('H:i:s') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($timetable->end_time, 'UTC')->setTimezone('Africa/Nairobi')->format('H:i:s')  }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap"><a href="{{route('attendance.qr-code', $timetable->id)}}"><x-button>QR Code</x-button></a><a href="{{route('attendance.index', $timetable->id)}}"><x-button>View Attendance</x-button></a></td>
                                 </tr>
                             @endforeach

@@ -37,18 +37,7 @@ class AttendanceController extends Controller
     {
         $timetable = Timetable::find($timetable_id);
 
-        // Generate QR code and store it in storage/app/public
-        $qrCodePath = $timetable_id . '.png'; // Relative path within storage
-        $fullPath = Storage::disk('public')->path($qrCodePath);
-        QrCode::text($timetable_id)
-            ->setOutfile($fullPath)
-            ->setSize(10)
-            ->png();
-
-        // Generate public URL for the QR code
-        $qrCodeUrl = Storage::disk('public')->url($qrCodePath);
-
-        return view('qr-code.index', compact('qrCodeUrl', 'timetable'));
+        return view('qr-code.index', compact( 'timetable'));
     }
     public function create($timetable_id): Application|Factory|View
     {

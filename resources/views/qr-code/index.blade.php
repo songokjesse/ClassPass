@@ -21,12 +21,19 @@
         <h3>Date: {{$timetable->date}}</h3>
         <h3>Time: {{$timetable->start_time}}</h3>
         <div class="flex items-center justify-center">
-{{--        <img src="{{url($qrCode) }}" alt="Attendance QR Code">--}}
-        <img src="{{ $qrCodeUrl}}" alt="Attendance QR Code">
+            <div id="qrcode"></div>
         </div>
 
     </div>
 </div>
 </div>
 </div>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+        <script>
+            var uuid = @json($timetable->id);
+            new QRCode(document.getElementById("qrcode"), uuid);
+        </script>
+    @endpush
 </x-app-layout>

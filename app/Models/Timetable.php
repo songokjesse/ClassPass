@@ -14,7 +14,7 @@ class Timetable extends Model
 
     protected $fillable = ['course_id', 'location_name', 'date', 'start_time', 'end_time'];
 
-    public function course(): BelongsTo
+       public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
     }
