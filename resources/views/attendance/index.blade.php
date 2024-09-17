@@ -14,7 +14,7 @@
                         <h1 class="mt-2 text-2xl font-medium text-gray-900">
                             Attendance List
                         </h1>
-                        <a href="#"><x-button>Download List</x-button></a>
+                        <a href="{{route('attendance.download', $timetable->id)}}"><x-button>Download List</x-button></a>
                     </div>
                     <div class="overflow-x-auto ">
                         <table class="min-w-full divide-y divide-gray-200 mt-4">
